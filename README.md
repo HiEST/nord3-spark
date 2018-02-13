@@ -73,6 +73,8 @@ Get the example script, and modify only the *Experiment preparation* and *Experi
   * Variable **SPARK_WORKER_ARGS** and **WORKERS_NODE** contain the worker configuration. By default there is a worker per node, and all node resources available to the worker. If more workers per node are given, SPARK_WORKER_ARGS must be adjusted (e.g. WORKERS_NODE=2 -> SPARK_WORKER_ARGS='-c 8 -m 62g')
 * Submit your job with **bsub < script.sh**
 
+The example script is set to copy the Singularity image to _scratch_ only if it doesn't exist. If you modify the image, be sure to remove the image in /gpfs/scratch/...
+
 ### Environment
 * Your shared home is at /gpfs/home/bsc31/bsc31XXX (don't run things from here -> **NOT a working directory**)
 * Your shared scratch is at /gpfs/scratch/bsc31/bsc31XXX (**working directory**. It is temporary storage, without backup)
