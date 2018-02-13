@@ -54,6 +54,7 @@ Usage manuals:
 
 Script submission process:
 * Copy experiment files through **dt0{1,2,3}.bsc.es** (e.g., use scp)
+* Connect through Nord3 login **nord{1,2,3}.bsc.es** (using ssh)
 * Create script with totally automated experiment (and execution permissions)
   * Move experiments to /gpfs/scratch/...
   * Execute stuff
