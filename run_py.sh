@@ -27,12 +27,14 @@ cd $WORK_DIR
 
 EXPERIMENT=example.py
 
-# SPARK CONFIGURATION
+###############################################################################
+## SPARK CONFIGURATION (YOU PROBABLY DON'T NEED TO TOUCH THIS)
+
 SPARK_WORKER_ARGS=''	# By default '' (All resources). Set explicit values, e.g. for 16 cores & 125GB per worker: '-c 16 -m 125g'.
 WORKERS_NODE=1 		# By default 1 (All resources). Compose workers and resources in homogeneous nodes.
 
 ###############################################################################
-## SPARK EXECUTION
+## SPARK EXECUTION (YOU SHOULDN'T NEED TO TOUCH THIS)
 
 module load intel/2017.1 SINGULARITY/2.4.2
 
@@ -89,12 +91,14 @@ for node in $H_LIST_REV; do
 done;
 
 ###############################################################################
-# EXPERIMENT WRAP-UP
+## EXPERIMENT WRAP-UP
 
-# COPY RESULTS BACK TO HOME
+# CREATE HOME EXPERIMENT FOLDER (AND COPY SPARK OUTPUT)
 mkdir -p $HOME_DIR/experiment_${LSB_JOBID}
 mv $WORK_DIR/${MASTER_OUT}* $HOME_DIR/experiment_${LSB_JOBID}/
 mv $WORK_DIR/${WORKER_OUT}* $HOME_DIR/experiment_${LSB_JOBID}/
+
+# COPY RESULTS BACK TO HOME
 mv $WORK_DIR/wc-result.data $HOME_DIR/experiment_${LSB_JOBID}/
 mv $WORK_DIR/example.py $HOME_DIR/experiment_${LSB_JOBID}/
 mv $WORK_DIR/mobydick.txt $HOME_DIR/experiment_${LSB_JOBID}/
