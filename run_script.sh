@@ -20,17 +20,17 @@ WORK_DIR=/gpfs/scratch/bscXX/bscXXXXX/spark-test
 mkdir -p $WORK_DIR
 cd $WORK_DIR
 
+# COPY EXPERIMENT, DATA FILES, AND IMAGE (IF NEEDED)
+cp $HOME_DIR/mobydick.txt $WORK_DIR/
+cp $HOME_DIR/example.* $WORK_DIR/
+if [ ! -d $WORK_DIR/dcc-spark01.simg ]; then
+	cp $HOME_DIR/dcc-spark01.simg $WORK_DIR/ ;
+fi
+
 # SPARK SCRIPT TO BE SUBMITTED (SCALA, PYTHON OR R)
 EXPERIMENT=example.scala
 #EXPERIMENT=example.py
 #EXPERIMENT=example.R
-
-# COPY EXPERIMENT AND DATA FILES
-cp $HOME_DIR/mobydick.txt $WORK_DIR/mobydick.txt
-cp $HOME_DIR/$EXPERIMENT $WORK_DIR/$EXPERIMENT
-if [ ! -d $WORK_DIR/dcc-spark01.simg ]; then
-	cp $HOME_DIR/dcc-spark01.simg $WORK_DIR/dcc-spark01.simg;
-fi
 
 ###############################################################################
 ## SPARK CONFIGURATION (YOU PROBABLY DON'T NEED TO TOUCH THIS)
@@ -107,7 +107,7 @@ mv $WORK_DIR/${WORKER_OUT}* $HOME_DIR/experiment_${LSB_JOBID}/
 # COPY RESULTS BACK TO HOME
 mv $WORK_DIR/wc-result.data $HOME_DIR/experiment_${LSB_JOBID}/
 mv $WORK_DIR/mobydick.txt $HOME_DIR/experiment_${LSB_JOBID}/
-mv $WORK_DIR/$EXPERIMENT $HOME_DIR/experiment_${LSB_JOBID}/
+mv $WORK_DIR/example.* $HOME_DIR/experiment_${LSB_JOBID}/
 
 # THAT'S ALL, FOLKS!
 echo "Bye!"
