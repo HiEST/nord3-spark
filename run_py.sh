@@ -28,7 +28,7 @@ cd $WORK_DIR
 EXPERIMENT=example.py
 
 # SPARK CONFIGURATION
-SPARK_WORKER_ARGS=''	# By default '' (All resources). Set explicit values, e.g. for 16 cores & 125GB per worker: '-c 12 -m 120g'.
+SPARK_WORKER_ARGS=''	# By default '' (All resources). Set explicit values, e.g. for 16 cores & 125GB per worker: '-c 16 -m 125g'.
 WORKERS_NODE=1 		# By default 1 (All resources). Compose workers and resources in homogeneous nodes.
 
 ###############################################################################
