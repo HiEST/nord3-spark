@@ -1,0 +1,81 @@
+BootStrap: shub
+From: nickjer/singularity-rstudio
+
+%labels
+  Maintainer Josep Ll. Berral
+  Spark_Version 2.2.1
+  Hadoop_Version 2.7
+  BSC_Nord3 1.0
+
+%help
+  This will run Apache Spark with an RStudio Server base, adapted to BSC_Nord3
+
+%apprun spark-class
+  exec spark-class "${@}"
+
+%apprun spark-master
+  exec spark-class "org.apache.spark.deploy.master.Master" "${@}"
+
+%apprun spark-worker
+  exec spark-class "org.apache.spark.deploy.worker.Worker" "${@}"
+
+%runscript
+  exec spark-class "${@}"
+
+%environment
+  export SPARK_HOME=/nord3/spark
+  export PATH=${SPARK_HOME}/bin:${PATH}
+  export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-amd64
+  export J2REDIR=${JAVA_HOME}/jre/
+  export J2SDKDIR=${JAVA_HOME}
+  
+  export JAVA_BINDIR=${JAVA_HOME}/bin
+  export SDK_HOME=${JAVA_HOME}
+  export JDK_HOME=${JAVA_HOME}
+  export JRE_HOME=${JAVA_HOME}/jre/
+  export JAVA_ROOT=${JAVA_HOME}
+
+%post
+  # Software versions
+  export SPARK_VERSION=2.2.1
+  export HADOOP_VERSION=2.7
+  
+  # Install Spark
+  apt-get update
+  apt-get install -y --no-install-recommends \
+    openjdk-8-jre
+  if [ ! -d /nord3/spark ]; then
+    mkdir -p /nord3/spark  
+    wget \
+        --no-verbose \
+        -O - \
+        "http://mirror.cc.columbia.edu/pub/software/apache/spark/spark-${SPARK_VERSION}/spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz" \
+      | tar xz --strip-components=1 -C /nord3/spark
+  fi
+  
+  # NORD3 Mount points
+  mkdir -p /gpfs/home
+  mkdir -p /gpfs/projects
+  mkdir -p /gpfs/archive
+  mkdir -p /gpfs/scratch
+  mkdir -p /gpfs/apps
+  mkdir -p /scratch
+  mkdir -p /.statelite/tmpfs/gpfs/projects
+  mkdir -p /.statelite/tmpfs/gpfs/scratch
+  mkdir -p /.statelite/tmpfs/gpfs/home
+  mkdir -p /.statelite/tmpfs/gpfs/apps/MN3
+
+  # Install sparklyr: R interface for Apache Spark
+  Rscript -e " \
+    withCallingHandlers( \
+      install.packages( \
+        c('tidyverse','sparklyr'), \
+        repo = 'https://cran.rstudio.com/', \
+        clean = TRUE \
+      ), \
+      warning = function(w) stop(w) \
+    ) \
+  "
+
+  # Clean up
+  rm -rf /var/lib/apt/lists/*
