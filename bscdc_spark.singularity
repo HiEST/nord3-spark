@@ -1,0 +1,75 @@
+BootStrap: shub
+From: nickjer/singularity-rstudio
+
+%labels
+  Maintainer David Buchaca
+  Spark_Version 2.4.1
+  Hadoop_Version 2.7
+  Bscdc_singularity_for_spark
+
+%help
+  This will run Apache Spark with an RStudio Server base, adapted to BSC_Nord3
+
+%apprun spark-class
+  exec spark-class "${@}"
+
+%apprun spark-master
+  exec spark-class "org.apache.spark.deploy.master.Master" "${@}"
+
+%apprun spark-worker
+  exec spark-class "org.apache.spark.deploy.worker.Worker" "${@}"
+
+%runscript
+  exec spark-class "${@}"
+
+%environment
+  export SPARK_HOME=/opt/spark
+  export PATH=${SPARK_HOME}/bin:${PATH}
+  export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-amd64
+  export J2REDIR=${JAVA_HOME}/jre/
+  export J2SDKDIR=${JAVA_HOME}
+  
+  export JAVA_BINDIR=${JAVA_HOME}/bin
+  export SDK_HOME=${JAVA_HOME}
+  export JDK_HOME=${JAVA_HOME}
+  export JRE_HOME=${JAVA_HOME}/jre/
+  export JAVA_ROOT=${JAVA_HOME}
+  export PATH="/usr/local/anaconda/bin:$PATH"
+
+
+%post
+  # Software versions
+  export SPARK_VERSION=2.4.1
+  export HADOOP_VERSION=2.7
+
+  # Install Conda
+  if [ ! -d /usr/local/anaconda ]; then
+    wget https://repo.continuum.io/miniconda/Miniconda3-4.5.11-Linux-x86_64.sh -O ~/anaconda.sh && \
+    bash ~/anaconda.sh -b -p /usr/local/anaconda && \
+    rm ~/anaconda.sh
+  fi
+  # set anaconda path
+  export PATH="/usr/local/anaconda/bin:$PATH"
+
+  # install the bare minimum
+  conda install\
+    numpy scipy pandas scikit-learn nltk pyspark
+  conda clean --tarballs
+
+  
+  # Install Spark
+  apt-get update
+  apt-get install -y --no-install-recommends \
+    openjdk-8-jre
+  if [ ! -d /opt/spark ]; then
+    mkdir -p /opt/spark  
+    wget \
+        --no-verbose \
+        -O - \
+        "http://archive.apache.org/dist/spark/spark-2.4.1/spark-2.4.1-bin-hadoop2.7.tgz" \
+      | tar xz --strip-components=1 -C /opt/spark
+  fi
+  
+
+  # Clean up
+  rm -rf /var/lib/apt/lists/*
