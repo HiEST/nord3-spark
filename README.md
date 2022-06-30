@@ -1,9 +1,8 @@
 # Apache Spark in MareNostrum-IV and Nord3
-Scripts to launch Spark executions on MareNostrum-IV and Nord3
 
-<center><img title="BSC Logo" alt="BSC" height="75" src="http://dmcan.bsc.es/images/cropped-BSC-Logo2.jpg">&nbsp;
-<img title="Spark Logo" alt="Spark" style="background-color: #777;" height="75" src="http://dcai.bsc.es/images/spark-white.png">
-</center>
+<img title="BSC Logo" alt="BSC" height="75" src="http://dmcan.bsc.es/images/cropped-BSC-Logo2.jpg">
+
+Scripts to launch Spark executions on MareNostrum-IV and Nord3
 
 ## Singularity Image
 The latest version of the image is **dcc-spark02**. Edit and add the applications and libraries to be added to your environment as you please.
